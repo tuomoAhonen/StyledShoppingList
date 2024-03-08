@@ -2,9 +2,7 @@ import {View, Text, StyleSheet, Pressable} from 'react-native';
 import {getDatabase, remove, ref} from 'firebase/database';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import app from '../firebaseConfig';
-import {Dimensions} from 'react-native';
-const windowWidth = Dimensions.get('window').width;
-//console.log(windowWidth);
+
 const db = getDatabase(app);
 
 const ShoppingListItem = ({item}) => {
@@ -14,7 +12,6 @@ const ShoppingListItem = ({item}) => {
 		(async () => {
 			try {
 				//console.log(id);
-				//const result = await set(ref(db, `ShoppingList/${id}`), null);
 				return await remove(ref(db, `Products/${id}`));
 			} catch (error) {
 				return console.log(error);
@@ -39,8 +36,7 @@ const ShoppingListItem = ({item}) => {
 
 const styles = StyleSheet.create({
 	itemView: {
-		width: windowWidth,
-		//flex: 1,
+		flex: 1,
 		paddingLeft: 10,
 		paddingRight: 10,
 		flexDirection: 'row',
@@ -48,11 +44,11 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	itemDetailView: {
-		//flex: 4,
+		//flex: 20,
 		//justifyContent: 'flex-start',
 	},
 	deleteButtonView: {
-		//flex: 2,
+		//flex: 1,
 		//justifyContent: 'flex-end',
 	},
 });

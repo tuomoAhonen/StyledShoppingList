@@ -1,37 +1,20 @@
 import {StatusBar} from 'expo-status-bar';
 import {useEffect, useState} from 'react';
-import {StyleSheet, Text, TextInput, View, /*Button,*/ FlatList} from 'react-native';
-import {getDatabase, ref, push, set, onValue, remove} from 'firebase/database';
-import {Header, Input, Button} from '@rneui/themed';
+import {StyleSheet, View, FlatList} from 'react-native';
+import {getDatabase, ref, onValue, remove} from 'firebase/database';
+import {Header} from '@rneui/themed';
+
 import app from './firebaseConfig';
 import ShoppingListItem from './components/ShoppingListItem';
-import SaveButtonTextView from './components/SaveButtonTextView';
-import HeadingText from './components/header/HeadingText';
+import HeadingText from './components/HeadingText';
 import SeparatorComponent from './components/SeparatorComponent';
+import InputsView from './components/InputsView';
 
 const db = getDatabase(app);
 const productsRef = ref(db, 'Products/');
 
 export default function App() {
-	const [product, setProduct] = useState({name: '', amount: ''});
 	const [productList, setProductList] = useState([]);
-
-	const saveProduct = () => {
-		// do something
-
-		(async () => {
-			try {
-				await push(productsRef, product);
-				return setProduct({name: '', amount: ''});
-				/*
-				await set(productsRef, product);
-				return setProduct({name: '', amount: ''});
-        */
-			} catch (error) {
-				return console.log(error);
-			}
-		})();
-	};
 
 	useEffect(
 		() => {
@@ -75,22 +58,8 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
-			<Header centerComponent={<HeadingText />}></Header>
-			<Input
-				placeholder='Product name...'
-				value={product.name}
-				onChangeText={(e) => setProduct({...product, name: e})}
-				style={styles.textInputName}
-			/>
-			<Input
-				placeholder='Amount...'
-				value={product.amount}
-				onChangeText={(e) => setProduct({...product, amount: e})}
-				style={styles.textInputAmount}
-			/>
-			<View style={styles.buttonView}>
-				<Button title={<SaveButtonTextView />} onPress={saveProduct} />
-			</View>
+			<Header centerComponent={<HeadingText />} containerStyle={styles.header} />
+			<InputsView />
 			<View style={styles.flatListView}>
 				<FlatList
 					data={productList}
@@ -108,13 +77,11 @@ const styles = StyleSheet.create({
 		marginTop: 40,
 		flex: 1,
 		backgroundColor: '#fff',
-		alignItems: 'center',
 		justifyContent: 'flex-start',
 	},
-	header: {},
-	textInputName: {},
-	textInputAmount: {},
-	buttonView: {},
-	flatListView: {marginTop: 10, flex: 1},
+	header: {marginBottom: 5},
+	flatListView: {
+		justifyContent: 'flex-start',
+	},
 });
 
